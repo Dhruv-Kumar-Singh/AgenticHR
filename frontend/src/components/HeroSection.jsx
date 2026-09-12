@@ -2,7 +2,7 @@ import { useEffect, useRef } from 'react';
 import { Icon } from '@iconify/react';
 import gsap from 'gsap';
 
-export default function HeroSection() {
+export default function HeroSection({ onGoToApp }) {
   const titleRef = useRef(null);
   const subtitleRef = useRef(null);
   const actionsRef = useRef(null);
@@ -181,7 +181,11 @@ export default function HeroSection() {
               <div ref={actionsRef} className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto opacity-0">
                 <button
                   onClick={() => {
-                    document.getElementById('plans')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    if (onGoToApp) {
+                      onGoToApp();
+                    } else {
+                      document.getElementById('plans')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
                   }}
                   className="w-full sm:w-auto px-8 py-4 rounded-xl bg-white text-black font-semibold text-sm hover:bg-neutral-200 transition-all active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.15)] flex items-center justify-center gap-2.5 cursor-pointer"
                 >
