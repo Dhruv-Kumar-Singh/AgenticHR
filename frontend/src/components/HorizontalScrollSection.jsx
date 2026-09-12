@@ -1,4 +1,8 @@
 import { useEffect, useRef } from 'react';
+import gsap from 'gsap';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const schemaCards = [
   {
@@ -81,70 +85,50 @@ export default function HorizontalScrollSection() {
   useEffect(() => {
     const section = sectionRef.current;
     const track = trackRef.current;
-    const progress = progressRef.current;
-    if (!section || !track || !progress) return;
+    if (!section || !track) return;
 
-    let ticking = false;
+    const ctx = gsap.context(() => {
+      const tween = gsap.to(track, {
+        x: () => -(track.scrollWidth - window.innerWidth),
+        ease: 'none',
+      });
 
-    function updateMetrics() {
-      const maxTranslate = Math.max(0, track.scrollWidth - window.innerWidth);
-      const totalHeight = window.innerHeight + maxTranslate + window.innerHeight * 0.35;
-      section.style.height = `${totalHeight}px`;
-    }
+      ScrollTrigger.create({
+        trigger: section,
+        start: 'top top',
+        end: () => `+=${track.scrollWidth - window.innerWidth}`,
+        pin: true,
+        anticipatePin: 1,
+        scrub: 1,
+        invalidateOnRefresh: true,
+        animation: tween,
+        onUpdate: (self) => {
+          if (progressRef.current) {
+            progressRef.current.style.width = `${self.progress * 100}%`;
+          }
+        },
+      });
+    }, section);
 
-    function updateScroll() {
-      const rect = section.getBoundingClientRect();
-      const maxTranslate = Math.max(0, track.scrollWidth - window.innerWidth);
-      const scrollable = Math.max(1, section.offsetHeight - window.innerHeight);
-      const passed = Math.min(Math.max(-rect.top, 0), scrollable);
-      const progressRatio = passed / scrollable;
-      const x = maxTranslate * progressRatio;
-      track.style.transform = `translate3d(${-x}px, 0, 0)`;
-      progress.style.width = `${progressRatio * 100}%`;
-      ticking = false;
-    }
-
-    function onScroll() {
-      if (!ticking) {
-        requestAnimationFrame(updateScroll);
-        ticking = true;
-      }
-    }
-
-    function onResize() {
-      updateMetrics();
-      updateScroll();
-    }
-
-    window.addEventListener('scroll', onScroll, { passive: true });
-    window.addEventListener('resize', onResize);
-    window.addEventListener('load', onResize);
-    updateMetrics();
-    updateScroll();
-
-    return () => {
-      window.removeEventListener('scroll', onScroll);
-      window.removeEventListener('resize', onResize);
-      window.removeEventListener('load', onResize);
-    };
+    return () => ctx.revert();
   }, []);
 
   return (
     <div ref={sectionRef} className="bg-[#000] relative" id="h-scroll-section">
-      <div className="sticky overflow-hidden flex bg-[#000] h-screen top-0 items-center">
+      <div className="flex overflow-hidden h-screen items-center bg-[#000] relative">
         <div className="absolute top-12 left-6 md:left-12 z-20 flex items-center gap-4">
           <div className="w-12 h-[1px] bg-white/20" />
           <span className="text-[10px] font-mono font-bold tracking-widest text-white uppercase">Engine Mechanics</span>
         </div>
 
         <div className="absolute bottom-12 left-6 md:left-12 z-20 w-48 h-1 bg-white/10 rounded-full overflow-hidden">
-          <div ref={progressRef} className="h-full bg-white w-0 transition-all duration-100 ease-out" id="h-scroll-progress" />
+          <div ref={progressRef} className="h-full bg-white w-0" id="h-scroll-progress" style={{ transition: 'none' }} />
         </div>
 
         <div
           ref={trackRef}
           id="h-scroll-track"
-          className="flex will-change-transform pr-[20vw] pl-[10vw] gap-x-8 gap-y-8 items-center"
+          className="flex will-change-transform pr-[20vw] pl-[10vw] gap-x-8 items-center"
           style={{ width: 'max-content' }}
         >
           {schemaCards.map((card) => (

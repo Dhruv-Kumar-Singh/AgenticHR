@@ -31,7 +31,7 @@ export default function LandingPage() {
   }, []);
 
   return (
-    <div className="text-neutral-200 antialiased overflow-x-hidden selection:bg-white/20 selection:text-white">
+    <div className="text-neutral-200 antialiased selection:bg-white/20 selection:text-white">
       <Background />
       <Navbar />
       <HeroSection />
