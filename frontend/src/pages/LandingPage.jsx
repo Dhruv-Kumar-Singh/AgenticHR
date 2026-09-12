@@ -4,6 +4,7 @@ import Navbar from '../components/Navbar';
 import HeroSection from '../components/HeroSection';
 import CapabilitiesSection from '../components/CapabilitiesSection';
 import BentoSection from '../components/BentoSection';
+import PricingSection from '../components/PricingSection';
 import HorizontalScrollSection from '../components/HorizontalScrollSection';
 import MarqueeSection from '../components/MarqueeSection';
 import OrbitalSection from '../components/OrbitalSection';
@@ -37,6 +38,7 @@ export default function LandingPage() {
       <HeroSection />
       <CapabilitiesSection />
       <BentoSection />
+      <PricingSection />
       <HorizontalScrollSection />
       <MarqueeSection />
       <OrbitalSection />

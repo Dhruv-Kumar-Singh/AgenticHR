@@ -114,7 +114,7 @@ export default function HorizontalScrollSection() {
   }, []);
 
   return (
-    <div ref={sectionRef} className="bg-[#000] relative" id="h-scroll-section">
+    <div ref={sectionRef} className="bg-[#000] relative" id="analysis">
       <div className="flex overflow-hidden h-screen items-center bg-[#000] relative">
         <div className="absolute top-12 left-6 md:left-12 z-20 flex items-center gap-4">
           <div className="w-12 h-[1px] bg-white/20" />

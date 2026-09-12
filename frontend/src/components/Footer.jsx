@@ -1,3 +1,5 @@
+import { Icon } from '@iconify/react';
+
 export default function Footer() {
   return (
     <footer className="flex flex-col w-full bg-[#000]">
@@ -15,32 +17,42 @@ export default function Footer() {
         <div className="max-w-4xl mx-auto px-6 relative z-10 flex flex-col items-center text-center">
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/5 border border-white/10 text-neutral-300 text-[10px] font-mono uppercase tracking-widest mb-6 backdrop-blur-md">
             <div className="w-1.5 h-1.5 rounded-full bg-white animate-pulse" />
-            <span>Kernel Ready</span>
+            <span>Free to Start</span>
           </div>
 
           <h2 className="text-4xl md:text-5xl font-normal text-white tracking-tight mb-6 font-mono typewriter-text">
-            &gt; init_workspace()
+            &gt; start_practice()
           </h2>
 
           <p className="text-neutral-400 max-w-lg font-light leading-relaxed mb-10">
-            Instantiate a new spatial computing node. Connect to the global mesh network with deterministic state synchronization.
+            Create your free account and run your first mock interview in minutes — no setup required.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center gap-4">
-            <button className="w-full sm:w-auto group relative inline-flex items-center justify-center px-8 py-3.5 text-sm font-medium text-black bg-white rounded-full transition-all duration-300 hover:scale-105 hover:bg-neutral-200 shadow-[0_0_30px_rgba(255,255,255,0.2)]">
+            <button
+              onClick={() => {
+                document.getElementById('plans')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+              className="w-full sm:w-auto group relative inline-flex items-center justify-center px-8 py-3.5 text-sm font-medium text-black bg-white rounded-full transition-all duration-300 hover:scale-105 hover:bg-neutral-200 shadow-[0_0_30px_rgba(255,255,255,0.2)] cursor-pointer"
+            >
               <span className="relative z-10 flex items-center gap-2">
-                Deploy Node
+                Start Free
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="transition-transform duration-300 group-hover:translate-x-1">
                   <path d="M5 12h14" /><path d="m12 5 7 7-7 7" />
                 </svg>
               </span>
             </button>
-            <button className="w-full sm:w-auto group relative inline-flex items-center justify-center px-8 py-3.5 text-sm font-medium text-white bg-white/5 border border-white/10 rounded-full transition-all duration-300 hover:bg-white/10 backdrop-blur-sm">
+            <button
+              onClick={() => {
+                document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }}
+              className="w-full sm:w-auto group relative inline-flex items-center justify-center px-8 py-3.5 text-sm font-medium text-white bg-white/5 border border-white/10 rounded-full transition-all duration-300 hover:bg-white/10 backdrop-blur-sm cursor-pointer"
+            >
               <span className="relative z-10 flex items-center gap-2 text-neutral-300 group-hover:text-white transition-colors">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                  <path d="m18 16 4-4-4-4" /><path d="m6 8-4 4 4 4" /><path d="m14.5 4-5 16" />
+                  <polygon points="5 3 19 12 5 21 5 3" />
                 </svg>
-                API Reference
+                Watch Demo
               </span>
             </button>
           </div>
@@ -52,23 +64,35 @@ export default function Footer() {
         <div className="max-w-7xl mx-auto px-6 relative z-10 flex flex-col w-full">
           <div className="grid grid-cols-2 md:grid-cols-6 gap-x-8 gap-y-12 pb-16 border-b border-white/10 w-full">
             <div className="col-span-2 md:col-span-2 lg:col-span-3 flex flex-col items-start gap-4">
-              <div
-                className="flex gap-3 bg-center text-white bg-cover pt-6 pr-12 pb-6 pl-12 gap-x-3 gap-y-3 items-center"
-                style={{ backgroundImage: 'url(https://hoirqrkdgbmvpwutwuwj.supabase.co/storage/v1/object/public/assets/assets/53e40404-d9d0-4f28-9e82-7f2f45062936_1600w.png)' }}
-              />
+              <a
+                href="#"
+                onClick={(e) => {
+                  e.preventDefault();
+                  window.scrollTo({ top: 0, behavior: 'smooth' });
+                }}
+                className="flex items-center gap-2.5 group cursor-pointer"
+              >
+                <div className="w-8 h-8 rounded-lg bg-white/10 border border-white/20 flex items-center justify-center group-hover:border-white/40 group-hover:bg-white/15 transition-all duration-300">
+                  <Icon icon="solar:atom-bold-duotone" className="w-5 h-5 text-white" />
+                </div>
+                <span className="text-xl font-bold tracking-tight text-white font-sans flex items-center gap-1.5">
+                  Praxis
+                  <span className="inline-block w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                </span>
+              </a>
               <p className="text-sm text-neutral-500 max-w-sm font-light leading-relaxed mt-2">
-                A purely deterministic ecosystem designed for scale. Construct, monitor, and deploy with tactile precision across the global mesh network.
+                AI-powered interview prep and HR analytics, built to help every candidate walk in ready.
               </p>
               <div className="flex flex-col gap-2">
-                {['Engine', 'Studio', 'Research', 'Network Map'].map((l) => (
+                {['For Candidates', 'For HR Teams', 'Templates', 'Pricing'].map((l) => (
                   <a key={l} href="#" className="text-sm text-neutral-500 hover:text-white transition-colors duration-200">{l}</a>
                 ))}
               </div>
             </div>
 
             {[
-              { title: 'Resources', links: ['Documentation', 'API Reference', 'Changelog', 'System Status'] },
-              { title: 'Company', links: ['About', 'Blog', 'Careers', 'Contact'] },
+              { title: 'Resources', links: ['Help Center', 'Interview Guides', 'Blog', 'Status'] },
+              { title: 'Company', links: ['About', 'Careers', 'Contact', 'Privacy'] },
             ].map(({ title, links }) => (
               <div key={title} className="flex flex-col gap-4">
                 <h4 className="text-[10px] font-mono font-medium text-white uppercase tracking-widest mb-2">{title}</h4>
@@ -98,7 +122,7 @@ export default function Footer() {
               </div>
             </div>
             <div className="flex items-center gap-4 text-[10px] text-neutral-600 font-mono uppercase tracking-widest">
-              <span>© 2024 Praxis.</span>
+              <span>© 2024 Praxis AI.</span>
               <span className="px-2 py-0.5 border border-white/10 rounded">v4.0.0</span>
             </div>
           </div>

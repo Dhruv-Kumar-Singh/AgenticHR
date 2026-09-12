@@ -45,7 +45,7 @@ export default function ExpansionSection() {
   }, []);
 
   return (
-    <section className="antialiased selection:bg-neutral-800 selection:text-white flex flex-col min-h-screen w-full items-center">
+    <section id="how-it-works" className="antialiased selection:bg-neutral-800 selection:text-white flex flex-col min-h-screen w-full items-center">
       {/* Progressive blur overlay */}
       <div className="gradient-blur">
         <div /><div /><div /><div /><div /><div />
@@ -63,18 +63,21 @@ export default function ExpansionSection() {
         <header className="pt-40 pb-24 px-6 md:px-12 relative z-10 flex flex-col items-center text-center w-full overflow-hidden">
           <div id="hero-badge" className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-neutral-800 bg-neutral-900/30 text-xs font-normal text-neutral-400 mb-8 opacity-0">
             <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 shadow-[0_0_8px_rgba(16,185,129,0.5)]" />
-            System initialization complete
+            Your dashboard is ready
           </div>
 
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-medium tracking-tight text-white w-full max-w-[1100px] leading-[1.06] masked-reveal-target break-words whitespace-normal">
-            <span className="mask-word">
-              <span className="mask-word-inner">Architecture that scales organically with your complexity.</span>
-            </span>
+            {'Practice that grows with you, one interview at a time.'
+              .split(' ')
+              .map((word, idx) => (
+                <span key={idx} className="mask-word inline-block mr-3">
+                  <span className="mask-word-inner inline-block">{word}</span>
+                </span>
+              ))}
           </h1>
 
           <p id="hero-desc" className="mt-8 text-base md:text-lg text-neutral-400 max-w-2xl font-normal opacity-0">
-            Begin with a single core. As data flows increase, the system progressively reveals deeper layers, connections,
-            and autonomous sub-routines. Scroll to initiate expansion.
+            Start with a single mock session. As you keep going, deeper insights — trends, comparisons, and HR-ready reports — unlock automatically. Scroll to see how it builds.
           </p>
         </header>
 
@@ -95,9 +98,9 @@ export default function ExpansionSection() {
                   <div className="w-12 h-12 rounded-xl bg-neutral-800/50 border border-neutral-700 flex items-center justify-center mb-4">
                     <Icon icon="solar:cpu-bolt-bold-duotone" className="text-2xl text-neutral-300" />
                   </div>
-                  <h3 className="text-lg font-medium tracking-tight text-neutral-100">Primary Core</h3>
+                  <h3 className="text-lg font-medium tracking-tight text-neutral-100">Your First Session</h3>
                   <p className="mt-2 text-sm text-neutral-500 font-normal">
-                    Single point of origin. Awaiting data saturation to expand network topography.
+                    One mock interview is all it takes to get started. Every session after that builds a fuller picture of your progress.
                   </p>
                 </div>
               </div>
@@ -110,8 +113,8 @@ export default function ExpansionSection() {
               <div className="absolute top-0 left-1/4 right-1/4 h-[1px] bg-neutral-800 seq-line-h" style={{ transformOrigin: 'center', transform: 'scaleX(0)' }} />
               <div className="flex flex-col md:flex-row justify-center gap-8 md:gap-32 pt-8">
                 {[
-                  { icon: 'solar:database-bold-duotone', title: 'Data Persistence', desc: 'State is separated from execution. Local cache clusters begin forming to handle increased read throughput.', dir: 'br' },
-                  { icon: 'solar:network-bold-duotone', title: 'Load Distribution', desc: 'Traffic is dynamically routed. Edge nodes are deployed to minimize latency for incoming external requests.', dir: 'bl' },
+                  { icon: 'solar:database-bold-duotone', title: 'Answer History', desc: "Every response, score, and tip is saved automatically, so you can track how you're improving over time.", dir: 'br' },
+                  { icon: 'solar:network-bold-duotone', title: 'Live Scoring', desc: 'Posture, tone, and confidence are scored the moment you finish speaking — no waiting for a report later.', dir: 'bl' },
                 ].map(({ icon, title, desc, dir }) => (
                   <div key={title} className="w-full max-w-sm seq-node opacity-0" style={{ transform: 'translateY(20px)' }}>
                     <div className={`p-[1px] rounded-2xl bg-gradient-to-${dir} from-neutral-700/50 via-neutral-800/20 to-transparent w-full`}>
@@ -138,16 +141,16 @@ export default function ExpansionSection() {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6 pt-8 w-full max-w-5xl mx-auto px-4 md:px-0">
                 {[
                   {
-                    icon: 'solar:shield-keyhole-bold-duotone', title: 'Security Layers', desc: 'Automated threat mitigation.',
-                    badge: 'Active', badgeClass: '', metric: { label: 'Integrity', value: '99.9%', barW: 'w-[99%]' }, type: 'bar',
+                    icon: 'solar:shield-keyhole-bold-duotone', title: 'Data Privacy', desc: 'Your video and audio stay encrypted and private.',
+                    badge: 'Active', badgeClass: '', metric: { label: 'Privacy Score', value: '99.9%', barW: 'w-[99%]' }, type: 'bar',
                   },
                   {
-                    icon: 'solar:widget-add-bold-duotone', title: 'Micro-services', desc: 'Spinning up isolated containers.',
-                    badge: 'Syncing', badgeClass: 'flex items-center gap-1', metricType: 'barchart', type: 'barchart',
+                    icon: 'solar:widget-add-bold-duotone', title: 'Company Templates', desc: 'Industry-specific question sets, ready to go.',
+                    badge: 'Ready', badgeClass: 'flex items-center gap-1', metricType: 'barchart', type: 'barchart',
                   },
                   {
-                    icon: 'solar:chart-square-bold-duotone', title: 'Telemetry', desc: 'Aggregating system logs & traces.',
-                    badge: 'Live', badgeClass: '', metric: { label: 'Latency', value: '12', unit: 'ms' }, type: 'stat',
+                    icon: 'solar:chart-square-bold-duotone', title: 'HR Reports', desc: 'Compiling scorecards and analytics for recruiters.',
+                    badge: 'Live', badgeClass: '', metric: { label: 'Turnaround', value: '12', unit: 'min' }, type: 'stat',
                   },
                 ].map((node) => (
                   <div key={node.title} className="w-full seq-node opacity-0" style={{ transform: 'translateY(20px)' }}>
@@ -157,7 +160,7 @@ export default function ExpansionSection() {
                           <div className="flex justify-between items-center mb-3">
                             <Icon icon={node.icon} className="text-lg text-neutral-400" />
                             <span className={`text-[10px] font-medium tracking-wide text-neutral-500 uppercase px-2 py-0.5 rounded bg-neutral-900 border border-neutral-800 ${node.badgeClass}`}>
-                              {node.type === 'barchart' && <span className="w-1 h-1 rounded-full bg-blue-500" />}
+                              {node.type === 'barchart' && <span className="w-1 h-1 rounded-full bg-emerald-500" />}
                               {node.badge}
                             </span>
                           </div>

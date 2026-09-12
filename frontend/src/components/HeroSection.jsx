@@ -179,11 +179,19 @@ export default function HeroSection() {
               </p>
 
               <div ref={actionsRef} className="flex flex-col sm:flex-row items-center gap-4 w-full sm:w-auto opacity-0">
-                <button className="w-full sm:w-auto px-8 py-4 rounded-xl bg-white text-black font-semibold text-sm hover:bg-neutral-200 transition-all active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.15)] flex items-center justify-center gap-2.5">
+                <button
+                  onClick={() => {
+                    document.getElementById('plans')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }}
+                  className="w-full sm:w-auto px-8 py-4 rounded-xl bg-white text-black font-semibold text-sm hover:bg-neutral-200 transition-all active:scale-95 shadow-[0_0_30px_rgba(255,255,255,0.15)] flex items-center justify-center gap-2.5 cursor-pointer"
+                >
                   <Icon icon="solar:rocket-bold-duotone" className="text-lg" /> Start Mock Interview
                 </button>
                 <button
-                  className="w-full sm:w-auto px-8 py-4 rounded-xl text-white font-normal text-sm hover:bg-neutral-800 transition-all backdrop-blur-md flex items-center justify-center gap-2.5"
+                  onClick={() => {
+                    document.getElementById('how-it-works')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                  }}
+                  className="w-full sm:w-auto px-8 py-4 rounded-xl text-white font-normal text-sm hover:bg-neutral-800 transition-all backdrop-blur-md flex items-center justify-center gap-2.5 cursor-pointer"
                   style={{
                     background:
                       'linear-gradient(rgba(20,20,20,0.4), rgba(20,20,20,0.4)) padding-box, linear-gradient(180deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.02) 100%) border-box',

@@ -115,12 +115,11 @@ export default function OrbitalSection() {
       <div className="relative z-20 flex flex-col items-center text-center px-6 mb-20">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/15 bg-white/[0.04] backdrop-blur-xl mb-6 shadow-[0_0_20px_rgba(255,255,255,0.04)]">
           <span className="h-1.5 w-1.5 rounded-full bg-white/80 animate-pulse" />
-          <span className="text-[10px] font-mono uppercase tracking-[0.22em] text-white/90">Unified System</span>
+          <span className="text-[10px] font-mono uppercase tracking-[0.22em] text-white/90">One Platform</span>
         </div>
-        <h2 className="md:text-5xl text-4xl font-semibold text-white tracking-tight mb-4">Data Convergence</h2>
+        <h2 className="md:text-5xl text-4xl font-semibold text-white tracking-tight mb-4">Everything in One Place</h2>
         <p className="max-w-md mx-auto text-sm text-neutral-400 font-light leading-relaxed">
-          Multiple scattered elements, fragmented workflows, and disparate interfaces are pulled into a singular cognitive core.
-          Complexity compressed into absolute control.
+          Question generation, posture tracking, tone analysis, and HR reporting all run in one seamless session — no separate tools, no exporting data between apps.
         </p>
       </div>
 

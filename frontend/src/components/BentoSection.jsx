@@ -23,7 +23,7 @@ export default function BentoSection() {
   }, []);
 
   return (
-    <section className="z-10 py-32 relative bg-[#000]">
+    <section className="z-10 py-32 relative bg-[#000]" id="dashboard">
       <div className="max-w-7xl mx-auto px-6">
         <div className="flex flex-col items-start mb-16 fade-up">
           <h2 className="text-3xl md:text-5xl font-semibold tracking-tight mb-4 text-white">Your Interview Dashboard</h2>
