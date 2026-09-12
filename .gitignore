@@ -1,0 +1,78 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Diagnostic / Runtime
+node_modules/
+dist/
+dist-ssr/
+build/
+out/
+*.local
+
+# Environment Variables & Secrets
+.env
+.env.*
+!.env.example
+!.env.template
+*.env
+*.env.*
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Python / Virtual Environments
+__pycache__/
+*.py[cod]
+*$py.class
+.venv/
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Editor Directories and Files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Thumbs.db
+ehthumbs.db
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+*.swo
+*.swn
+
+# Testing & Coverage
+coverage/
+*.lcov
+.nyc_output/
+
+# Cache & Temporary files
+.cache/
+.parcel-cache/
+.turbo/
+.eslintcache
+.stylelintcache
+*.tsbuildinfo
+.temp/
+tmp/
+temp/
