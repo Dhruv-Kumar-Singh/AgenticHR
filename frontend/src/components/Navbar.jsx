@@ -92,7 +92,7 @@ export default function Navbar({ onGoToApp }) {
         </div>
         <button
           onClick={() => (onGoToApp ? onGoToApp() : handleScrollTo('plans'))}
-          className="px-5 py-2.5 text-xs font-semibold text-neutral-900 bg-white border border-white rounded-full hover:bg-neutral-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.2)] flex items-center gap-2 cursor-pointer"
+          className="px-5 py-2.5 text-xs font-semibold text-neutral-900 bg-white border border-white rounded-full hover:bg-neutral-200 transition-colors shadow-[0_0_20px_rgba(255,255,255,0.2)] flex items-center gap-2 cursor-pointer active:scale-95"
         >
           Start Practicing
           <Icon icon="solar:arrow-right-linear" />

@@ -28,7 +28,7 @@ export default function AppNavbar({ activeTab, onTabChange, onViewLanding, hasUn
         </span>
       </a>
 
-      {/* Center nav links: Home, Analysis, Profile with route-based active state */}
+      {/* Center nav links: Home, Analysis, Profile */}
       <div className="flex items-center gap-6 sm:gap-8 text-xs font-mono">
         {navItems.map(({ label, id }) => {
           const isActive = activeTab === id;

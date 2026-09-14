@@ -4,12 +4,15 @@ import HomePage from './pages/HomePage';
 import AnalysisView from './pages/AnalysisView';
 import ProfileView from './pages/ProfileView';
 import LandingPage from './pages/LandingPage';
+import PremiumPlanPage from './pages/PremiumPlanPage';
 import NewInterviewModal from './components/NewInterviewModal';
 import InterviewReportPage from './pages/InterviewReportPage';
 
 export default function App() {
   // Navigation tabs: 'home' | 'analysis' | 'profile' | 'landing' | 'interview-report'
   const [currentView, setCurrentView] = useState('home');
+  // Plan mode: 'free' | 'premium'
+  const [currentPlan, setCurrentPlan] = useState('free');
   const [isNewInterviewOpen, setIsNewInterviewOpen] = useState(false);
   const [interviewInitialData, setInterviewInitialData] = useState(null);
   const [selectedReport, setSelectedReport] = useState(null);
@@ -19,7 +22,7 @@ export default function App() {
     setIsNewInterviewOpen(true);
   };
 
-  const handleStartSession = (config) => {
+  const handleStartSession = (_config) => {
     // Switch to home and notify
     setCurrentView('home');
   };
@@ -48,7 +51,16 @@ export default function App() {
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           </button>
         </div>
-        <LandingPage onGoToApp={() => setCurrentView('home')} />
+        <LandingPage
+          onGoToApp={() => {
+            setCurrentPlan('free');
+            setCurrentView('home');
+          }}
+          onGoToPremium={() => {
+            setCurrentPlan('premium');
+            setCurrentView('home');
+          }}
+        />
       </div>
     );
   }
@@ -73,7 +85,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-black text-neutral-200 selection:bg-white/20 selection:text-white relative">
-      {/* Praxis App Navigation with Logo, Symbol, 3 tabs (Home, Analysis, Profile) */}
+      {/* Praxis App Navigation with 3 tabs (Home, Analysis, Profile) */}
       <AppNavbar
         activeTab={currentView}
         onTabChange={(tab) => setCurrentView(tab)}
@@ -81,14 +93,23 @@ export default function App() {
         onViewLanding={() => setCurrentView('landing')}
       />
 
-      {/* Main Views */}
+      {/* Main Views: Home, Analysis, Profile for both Free & Premium */}
       <main>
         {currentView === 'home' && (
-          <HomePage
-            userName="Alex"
-            onOpenNewInterview={(item) => handleOpenNewInterview(item)}
-            onViewReport={handleViewReport}
-          />
+          currentPlan === 'premium' ? (
+            <PremiumPlanPage
+              userName="Alex"
+              onOpenNewInterview={(item) => handleOpenNewInterview(item)}
+              onViewReport={handleViewReport}
+              onSwitchToFree={() => setCurrentPlan('free')}
+            />
+          ) : (
+            <HomePage
+              userName="Alex"
+              onOpenNewInterview={(item) => handleOpenNewInterview(item)}
+              onViewReport={handleViewReport}
+            />
+          )
         )}
         {currentView === 'analysis' && (
           <AnalysisView
@@ -97,7 +118,13 @@ export default function App() {
         )}
         {currentView === 'profile' && (
           <ProfileView
+            currentPlan={currentPlan}
             onOpenNewInterview={() => handleOpenNewInterview()}
+            onViewReport={handleViewReport}
+            onGoToPremium={() => {
+              setCurrentPlan('premium');
+              setCurrentView('home');
+            }}
           />
         )}
       </main>
