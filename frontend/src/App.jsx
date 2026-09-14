@@ -5,12 +5,14 @@ import AnalysisView from './pages/AnalysisView';
 import ProfileView from './pages/ProfileView';
 import LandingPage from './pages/LandingPage';
 import NewInterviewModal from './components/NewInterviewModal';
+import InterviewReportPage from './pages/InterviewReportPage';
 
 export default function App() {
-  // Navigation tabs: 'home' | 'analysis' | 'profile' | 'landing'
+  // Navigation tabs: 'home' | 'analysis' | 'profile' | 'landing' | 'interview-report'
   const [currentView, setCurrentView] = useState('home');
   const [isNewInterviewOpen, setIsNewInterviewOpen] = useState(false);
   const [interviewInitialData, setInterviewInitialData] = useState(null);
+  const [selectedReport, setSelectedReport] = useState(null);
 
   const handleOpenNewInterview = (data = null) => {
     setInterviewInitialData(data);
@@ -20,6 +22,16 @@ export default function App() {
   const handleStartSession = (config) => {
     // Switch to home and notify
     setCurrentView('home');
+  };
+
+  const handleViewReport = (interview) => {
+    setSelectedReport(interview);
+    setCurrentView('interview-report');
+  };
+
+  const handleBackFromReport = () => {
+    setCurrentView('home');
+    setSelectedReport(null);
   };
 
   // If viewing the Landing Page
@@ -41,6 +53,24 @@ export default function App() {
     );
   }
 
+  // If viewing a full interview report
+  if (currentView === 'interview-report' && selectedReport) {
+    return (
+      <>
+        <AppNavbar
+          activeTab="home"
+          onTabChange={(tab) => { setCurrentView(tab); setSelectedReport(null); }}
+          onOpenNewInterview={() => handleOpenNewInterview()}
+          onViewLanding={() => setCurrentView('landing')}
+        />
+        <InterviewReportPage
+          interview={selectedReport}
+          onBack={handleBackFromReport}
+        />
+      </>
+    );
+  }
+
   return (
     <div className="min-h-screen bg-black text-neutral-200 selection:bg-white/20 selection:text-white relative">
       {/* Praxis App Navigation with Logo, Symbol, 3 tabs (Home, Analysis, Profile) */}
@@ -57,6 +87,7 @@ export default function App() {
           <HomePage
             userName="Alex"
             onOpenNewInterview={(item) => handleOpenNewInterview(item)}
+            onViewReport={handleViewReport}
           />
         )}
         {currentView === 'analysis' && (

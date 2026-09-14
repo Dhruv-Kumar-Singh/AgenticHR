@@ -2,13 +2,10 @@ import { useState, useEffect, useRef } from 'react';
 import { Icon } from '@iconify/react';
 import gsap from 'gsap';
 import Background from '../components/Background';
-import InterviewDetailsModal from '../components/InterviewDetailsModal';
 
-export default function HomePage({ userName = 'Alex' }) {
+export default function HomePage({ userName = 'Alex', onViewReport }) {
   const [topicInput, setTopicInput] = useState('');
   const [attachedFiles, setAttachedFiles] = useState([]);
-  const [selectedInterview, setSelectedInterview] = useState(null);
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
 
   const fileInputRef = useRef(null);
   const greetingRef = useRef(null);
@@ -372,10 +369,7 @@ export default function HomePage({ userName = 'Alex' }) {
             {previousInterviews.map((item) => (
               <div
                 key={item.id}
-                onClick={() => {
-                  setSelectedInterview(item);
-                  setIsDetailsOpen(true);
-                }}
+                onClick={() => onViewReport && onViewReport(item)}
                 className="rounded-3xl border border-white/10 bg-[#050505] p-7 md:p-8 relative overflow-hidden group hover:border-white/20 transition-all duration-500 hover:-translate-y-1 fade-up shadow-[0_4px_30px_rgba(0,0,0,0.5)] cursor-pointer flex flex-col justify-between"
               >
                 {/* Background grid accent on hover */}
@@ -420,13 +414,6 @@ export default function HomePage({ userName = 'Alex' }) {
         </div>
       </section>
 
-      {/* Details report modal when clicking an interview card */}
-      <InterviewDetailsModal
-        isOpen={isDetailsOpen}
-        interview={selectedInterview}
-        onClose={() => setIsDetailsOpen(false)}
-        onReattempt={() => setIsDetailsOpen(false)}
-      />
     </div>
   );
 }

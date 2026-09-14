@@ -1,165 +1,232 @@
-import { useState } from 'react';
+import { useEffect } from 'react';
 import { Icon } from '@iconify/react';
-import DocumentUploadModal from '../components/DocumentUploadModal';
+import {
+  ResponsiveContainer,
+  RadarChart,
+  PolarGrid,
+  PolarAngleAxis,
+  Radar,
+  Tooltip,
+} from 'recharts';
 
+// ─── Mock Data ────────────────────────────────────────────────────────────────
+const profile = {
+  name: 'Alex Morgan',
+  initials: 'AM',
+  headline: 'Final-year CSE Student & Aspiring Software Engineer',
+  location: 'Bangalore, India',
+  email: 'alex.morgan@example.com',
+  bio: `I'm a final-year Computer Science student with a deep passion for distributed systems and backend engineering. I've spent the last two years working on open-source projects, competitive programming, and building production-grade side projects. Currently preparing for product engineering roles at top-tier tech companies, with a focus on systems design and high-performance APIs.`,
+};
+
+const competencies = [
+  { skill: 'Communication', score: 85 },
+  { skill: 'Technical Depth', score: 78 },
+  { skill: 'Problem Solving', score: 90 },
+  { skill: 'Confidence', score: 82 },
+  { skill: 'Clarity', score: 88 },
+];
+
+const links = [
+  { label: 'LinkedIn', icon: 'solar:linkedin-bold-duotone', href: '#' },
+  { label: 'GitHub', icon: 'solar:code-square-bold-duotone', href: '#' },
+  { label: 'Portfolio', icon: 'solar:global-bold-duotone', href: '#' },
+];
+
+// ─── Custom RadarChart Tooltip ────────────────────────────────────────────────
+function RadarTooltip({ active, payload }) {
+  if (!active || !payload || !payload.length) return null;
+  const d = payload[0];
+  return (
+    <div className="bg-black border border-white/10 rounded-xl px-3 py-2 shadow-[0_4px_24px_rgba(0,0,0,0.8)]">
+      <p className="text-[10px] font-mono text-neutral-500 uppercase tracking-widest mb-0.5">{d.payload.skill}</p>
+      <p className="text-sm font-mono text-white font-semibold">{d.value}%</p>
+    </div>
+  );
+}
+
+// ─── Section Card wrapper ─────────────────────────────────────────────────────
+function Card({ children, className = '' }) {
+  return (
+    <div
+      className={`rounded-3xl bg-[#050505] border border-white/10 hover:border-white/20 transition-all duration-500 relative overflow-hidden group ${className}`}
+    >
+      <div className="absolute inset-0 bg-grid opacity-[0.03] pointer-events-none group-hover:opacity-[0.08] transition-opacity" />
+      <div className="relative z-10">{children}</div>
+    </div>
+  );
+}
+
+// ─── Main Page ────────────────────────────────────────────────────────────────
 export default function ProfileView({ onOpenNewInterview }) {
-  const [isUploading, setIsUploading] = useState(false);
-  const [candidate, setCandidate] = useState({
-    name: 'Alex Morgan',
-    title: 'Senior / Staff Full Stack Engineer',
-    location: 'San Francisco, CA (Open to Remote)',
-    experience: '7+ Years of Industry Experience',
-    targetRoles: ['Staff Software Engineer', 'Engineering Manager', 'Distributed Systems Lead'],
-    targetCompensation: '$260,000 - $340,000 Base + Equity',
-  });
-
-  const [documents, setDocuments] = useState([
-    { id: '1', name: 'Alex_Morgan_Staff_Resume_2026.pdf', type: 'Resume / CV', size: '240 KB', updated: 'Yesterday' },
-    { id: '2', name: 'Stripe_Staff_FullStack_JD.pdf', type: 'Job Spec', size: '180 KB', updated: '3 days ago' },
-    { id: '3', name: 'Distributed_Systems_SystemDesign_Notes.md', type: 'Prep Notes', size: '64 KB', updated: 'Sep 05, 2026' },
-  ]);
-
-  const [aiPersona, setAiPersona] = useState('bar_raiser');
-
-  const personas = [
-    { id: 'bar_raiser', title: 'FAANG Bar Raiser', desc: 'Demanding, presses hard on edge cases, latency boundaries, and scale invariants.', icon: 'solar:shield-warning-bold-duotone' },
-    { id: 'collaborative', title: 'Collaborative Tech Lead', desc: 'Engaging, co-design oriented, prompts hints when stuck, friendly atmosphere.', icon: 'solar:users-group-two-rounded-bold-duotone' },
-    { id: 'executive', title: 'Director / VP Behavioral', desc: 'Focuses on strategic decisions, executive storytelling, business revenue metrics.', icon: 'solar:crown-bold-duotone' },
-  ];
-
-  const handleAddDoc = (doc) => {
-    setDocuments((prev) => [
-      { id: doc.id, name: doc.name, type: 'Uploaded Doc', size: doc.size, updated: 'Just now' },
-      ...prev,
-    ]);
-  };
+  // IntersectionObserver-driven fade-up reveal (same pattern as HomePage)
+  useEffect(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { root: null, rootMargin: '0px', threshold: 0.08 }
+    );
+    document.querySelectorAll('.fade-up').forEach((el) => observer.observe(el));
+    return () => observer.disconnect();
+  }, []);
 
   return (
-    <div className="min-h-screen text-neutral-200 antialiased pb-24 pt-24 px-4 sm:px-8 md:px-12 max-w-7xl mx-auto flex flex-col gap-10">
-      {/* Profile Header */}
-      <div className="p-6 sm:p-8 rounded-3xl bg-[#0e0e13]/90 border border-white/10 backdrop-blur-xl relative overflow-hidden flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
-        <div className="absolute top-0 right-0 w-80 h-80 bg-gradient-to-bl from-emerald-500/10 to-blue-500/10 rounded-full blur-3xl pointer-events-none" />
-
-        <div className="flex items-center gap-5">
-          <div className="relative">
-            <div className="w-20 h-20 rounded-2xl bg-gradient-to-tr from-indigo-600 via-blue-500 to-emerald-400 flex items-center justify-center text-white text-2xl font-bold border-2 border-white/20 shadow-xl">
-              AM
-            </div>
-            <span className="absolute bottom-1 right-1 w-4 h-4 rounded-full bg-emerald-400 border-2 border-[#0e0e13]" />
-          </div>
-
-          <div>
-            <div className="flex items-center gap-3 mb-1">
-              <h1 className="text-2xl sm:text-3xl font-bold text-white tracking-tight">{candidate.name}</h1>
-              <span className="text-xs font-mono px-2.5 py-0.5 rounded-full bg-emerald-400/10 text-emerald-300 border border-emerald-400/20">
-                Verified Candidate
-              </span>
-            </div>
-            <p className="text-sm text-neutral-300 font-medium">{candidate.title}</p>
-            <p className="text-xs text-neutral-500 font-mono mt-0.5">{candidate.location} • {candidate.experience}</p>
-          </div>
-        </div>
-
-        <button
-          onClick={onOpenNewInterview}
-          className="px-6 py-3 rounded-xl text-xs font-semibold text-black bg-white hover:bg-neutral-200 transition-all shadow-md active:scale-95 flex items-center gap-2 cursor-pointer"
-        >
-          <Icon icon="solar:play-circle-bold-duotone" className="text-base" />
-          Launch Mock Session
-        </button>
+    <div className="min-h-screen text-neutral-200 antialiased bg-black selection:bg-white/20 selection:text-white">
+      {/* Subtle radial glow */}
+      <div className="fixed inset-0 pointer-events-none z-0">
+        <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[900px] h-[500px] bg-white/[0.018] rounded-full blur-[120px]" />
       </div>
 
-      {/* Two Column Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        {/* Documents & Context Library */}
-        <div className="lg:col-span-2 p-6 rounded-2xl bg-[#0e0e13]/80 border border-white/10 flex flex-col gap-5">
-          <div className="flex items-center justify-between">
-            <div>
-              <h3 className="text-base font-bold text-white flex items-center gap-2">
-                <Icon icon="solar:folder-with-files-bold-duotone" className="text-emerald-400" />
-                Resume & Knowledge Base
-              </h3>
-              <p className="text-xs text-neutral-400 mt-0.5">Documents parsed by Praxis Copilot during mock sessions.</p>
-            </div>
-            <button
-              onClick={() => setIsUploading(true)}
-              className="px-3.5 py-1.5 rounded-lg text-xs font-medium text-white bg-white/10 hover:bg-white/15 border border-white/10 transition-colors flex items-center gap-1.5 cursor-pointer"
-            >
-              <Icon icon="solar:add-circle-bold-duotone" className="text-emerald-400 text-sm" />
-              + Add Document
-            </button>
-          </div>
+      <div className="relative z-10 max-w-7xl mx-auto px-6 md:px-12 pt-32 pb-32 flex flex-col gap-10">
 
-          <div className="space-y-2.5">
-            {documents.map((doc) => (
-              <div
-                key={doc.id}
-                className="flex items-center justify-between p-3.5 rounded-xl bg-white/[0.02] border border-white/5 hover:border-white/10 transition-colors"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="w-9 h-9 rounded-lg bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-                    <Icon icon="solar:document-text-bold-duotone" className="text-lg" />
-                  </div>
-                  <div>
-                    <h4 className="text-xs font-medium text-white">{doc.name}</h4>
-                    <span className="text-[10px] font-mono text-neutral-500">{doc.type} • {doc.size}</span>
+        {/* ── 1. Profile Header ────────────────────────────────────────────── */}
+        <Card className="p-10 fade-up">
+          {/* Decorative glow accent top-right */}
+          <div className="absolute top-0 right-0 w-72 h-72 bg-gradient-to-bl from-white/[0.04] to-transparent rounded-full blur-3xl pointer-events-none" />
+
+          <div className="flex flex-col gap-6 relative z-10">
+            {/* ── Row 1: Avatar / Info + CTA ── */}
+            <div className="flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
+              {/* Avatar + Info */}
+              <div className="flex items-center gap-5">
+                {/* Circular avatar */}
+                <div className="relative shrink-0">
+                  <div className="w-28 h-28 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center text-white text-3xl font-bold tracking-tight shadow-[0_0_30px_rgba(255,255,255,0.06)]">
+                    {profile.initials}
                   </div>
                 </div>
-                <div className="flex items-center gap-3 text-xs font-mono text-neutral-500">
-                  <span>{doc.updated}</span>
-                  <button
-                    onClick={() => setDocuments((prev) => prev.filter((d) => d.id !== doc.id))}
-                    className="hover:text-rose-400 transition-colors cursor-pointer"
-                  >
-                    <Icon icon="solar:trash-bin-trash-bold" />
-                  </button>
+
+                <div>
+                  {/* Name — matching Hi, {userName} weight/tracking */}
+                  <h1 className="text-3xl sm:text-4xl font-semibold tracking-tight text-white mb-2">
+                    {profile.name}
+                  </h1>
+                  <p className="text-base text-neutral-300 font-medium mb-2">{profile.headline}</p>
+                  <div className="flex flex-wrap items-center gap-4 text-sm font-mono text-neutral-500">
+                    <span className="flex items-center gap-1">
+                      <Icon icon="solar:map-point-linear" className="text-xs" />
+                      {profile.location}
+                    </span>
+                    <span className="w-px h-3 bg-white/10" />
+                    <span className="flex items-center gap-1">
+                      <Icon icon="solar:letter-linear" className="text-xs" />
+                      {profile.email}
+                    </span>
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
 
-        {/* AI Interviewer Persona Preferences */}
-        <div className="p-6 rounded-2xl bg-[#0e0e13]/80 border border-white/10 flex flex-col gap-4">
-          <h3 className="text-base font-bold text-white flex items-center gap-2">
-            <Icon icon="solar:tuning-bold-duotone" className="text-purple-400" />
-            AI Persona Setting
-          </h3>
-          <p className="text-xs text-neutral-400">Choose how strict Praxis AI evaluates your mock answers.</p>
+              {/* Edit button */}
+              <button
+                className="px-4 py-2.5 rounded-full text-xs font-semibold text-neutral-300 bg-white/[0.04] border border-white/10 hover:bg-white/[0.08] hover:text-white hover:border-white/20 transition-all duration-300 shadow-[0_0_0px_rgba(255,255,255,0)] hover:shadow-[0_0_18px_rgba(255,255,255,0.06)] active:scale-95 flex items-center gap-2 cursor-pointer shrink-0 font-mono tracking-wide uppercase text-[11px]"
+              >
+                <Icon icon="solar:pen-2-linear" className="text-sm" />
+                Edit Profile
+              </button>
+            </div>
 
-          <div className="space-y-2.5">
-            {personas.map((p) => {
-              const isSelected = aiPersona === p.id;
-              return (
-                <div
-                  key={p.id}
-                  onClick={() => setAiPersona(p.id)}
-                  className={`p-3.5 rounded-xl border transition-all cursor-pointer ${
-                    isSelected
-                      ? 'bg-white/[0.06] border-emerald-400/60 shadow-[0_0_15px_rgba(52,211,153,0.08)]'
-                      : 'bg-white/[0.01] border-white/5 hover:border-white/15'
-                  }`}
-                >
-                  <div className="flex items-center justify-between mb-1">
-                    <span className="text-xs font-semibold text-white flex items-center gap-1.5">
-                      <Icon icon={p.icon} className={isSelected ? 'text-emerald-400' : 'text-neutral-400'} />
-                      {p.title}
-                    </span>
-                    {isSelected && <Icon icon="solar:check-circle-bold" className="text-xs text-emerald-400" />}
-                  </div>
-                  <p className="text-[11px] text-neutral-400 leading-relaxed">{p.desc}</p>
+            {/* ── Divider ── */}
+            <div className="w-full h-px bg-gradient-to-r from-transparent via-white/10 to-transparent" />
+
+            {/* ── Row 2: Resume pill + social links ── */}
+            <div className="flex flex-wrap items-center gap-3">
+              {/* Premium Resume pill */}
+              <button className="group flex items-center gap-3 pl-2 pr-4 py-2 rounded-full bg-white/[0.04] border border-white/10 hover:border-white/20 hover:bg-white/[0.07] transition-all duration-300 shadow-[0_0_0px_rgba(255,255,255,0)] hover:shadow-[0_0_18px_rgba(255,255,255,0.08)] cursor-pointer">
+                {/* Icon badge */}
+                <div className="w-7 h-7 rounded-full bg-white/10 border border-white/15 flex items-center justify-center group-hover:bg-white/15 group-hover:border-white/25 transition-all duration-300">
+                  <Icon icon="solar:document-text-bold-duotone" className="text-sm text-white" />
                 </div>
-              );
-            })}
-          </div>
-        </div>
-      </div>
+                <span className="text-[11px] font-mono text-neutral-300 group-hover:text-white transition-colors tracking-wide uppercase">Resume</span>
+              </button>
 
-      <DocumentUploadModal
-        isOpen={isUploading}
-        onClose={() => setIsUploading(false)}
-        onAttachDocument={handleAddDoc}
-      />
+              {/* Thin separator dot */}
+              <span className="w-1 h-1 rounded-full bg-white/10" />
+
+              {/* Social link chips */}
+              {links.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="flex items-center gap-2 px-3.5 py-2 rounded-full text-[11px] font-mono text-neutral-400 bg-white/[0.03] border border-white/10 hover:bg-white/[0.07] hover:text-white hover:border-white/20 transition-all duration-200 cursor-pointer tracking-wide uppercase"
+                >
+                  <Icon icon={link.icon} className="text-sm" />
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </div>
+        </Card>
+
+        {/* ── 2. About + Core Competency (side-by-side on lg) ─────────────── */}
+        <div className="grid grid-cols-1 lg:grid-cols-5 gap-8">
+
+          {/* About — 2 cols */}
+          <Card className="lg:col-span-2 p-10 flex flex-col gap-6 fade-up">
+            <div className="text-xs font-mono text-neutral-500 uppercase tracking-widest">About</div>
+            <p className="text-base text-neutral-300 font-light leading-relaxed">{profile.bio}</p>
+          </Card>
+
+          {/* Radar Chart — 3 cols */}
+          <Card className="lg:col-span-3 p-10 flex flex-col gap-6 fade-up">
+            <div className="flex items-center justify-between">
+              <div className="text-xs font-mono text-neutral-500 uppercase tracking-widest">Core Competency</div>
+              <div className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded bg-white/5 border border-white/10">
+                <span className="w-2 h-2 rounded-full bg-white animate-pulse shadow-[0_0_6px_rgba(255,255,255,0.5)]" />
+                <span className="text-[10px] font-mono text-white uppercase tracking-widest">AI Scored</span>
+              </div>
+            </div>
+
+            <div className="h-96">
+              <ResponsiveContainer width="100%" height="100%">
+                <RadarChart data={competencies} margin={{ top: 10, right: 30, bottom: 10, left: 30 }}>
+                  <PolarGrid
+                    stroke="rgba(255,255,255,0.08)"
+                    strokeDasharray="0"
+                  />
+                  <PolarAngleAxis
+                    dataKey="skill"
+                    tick={{
+                      fill: 'rgba(255,255,255,0.55)',
+                      fontFamily: 'JetBrains Mono, monospace',
+                      fontSize: 13,
+                    }}
+                  />
+                  <Tooltip content={<RadarTooltip />} />
+                  <Radar
+                    name="Score"
+                    dataKey="score"
+                    stroke="#ffffff"
+                    strokeWidth={1.5}
+                    fill="rgba(255,255,255,0.08)"
+                    dot={false}
+                  />
+                </RadarChart>
+              </ResponsiveContainer>
+            </div>
+
+            {/* Legend row */}
+            <div className="flex flex-wrap items-center gap-6 pt-4 border-t border-white/[0.06]">
+              {competencies.map((c) => (
+                <div key={c.skill} className="flex items-center gap-2">
+                  <span className="text-xs font-mono text-neutral-500 uppercase tracking-wide">{c.skill}</span>
+                  <span className="text-xs font-mono text-white font-semibold">{c.score}%</span>
+                </div>
+              ))}
+            </div>
+          </Card>
+        </div>
+
+
+
+      </div>
     </div>
   );
 }

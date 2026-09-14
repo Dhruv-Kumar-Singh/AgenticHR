@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 
-export default function AppNavbar({ activeTab, onTabChange, onViewLanding }) {
+export default function AppNavbar({ activeTab, onTabChange, onViewLanding, hasUnread = true }) {
   const navItems = [
     { label: 'Home', id: 'home' },
     { label: 'Analysis', id: 'analysis' },
@@ -28,7 +28,7 @@ export default function AppNavbar({ activeTab, onTabChange, onViewLanding }) {
         </span>
       </a>
 
-      {/* Center nav links: Home, Analysis, Profile with scroll-spy-style treatment driven by route */}
+      {/* Center nav links: Home, Analysis, Profile with route-based active state */}
       <div className="flex items-center gap-6 sm:gap-8 text-xs font-mono">
         {navItems.map(({ label, id }) => {
           const isActive = activeTab === id;
@@ -53,8 +53,8 @@ export default function AppNavbar({ activeTab, onTabChange, onViewLanding }) {
         })}
       </div>
 
-      {/* Right-aligned logged-in state: system status + user avatar */}
-      <div className="flex items-center gap-4">
+      {/* Right-aligned: system status + notification bell + optional landing toggle */}
+      <div className="flex items-center gap-3">
         {/* Landing Page Preview toggle */}
         {onViewLanding && (
           <button
@@ -72,13 +72,16 @@ export default function AppNavbar({ activeTab, onTabChange, onViewLanding }) {
           <span className="text-neutral-300">Sessions: Live</span>
         </div>
 
-        {/* User initials avatar */}
+        {/* Notification Bell */}
         <button
-          onClick={() => onTabChange('profile')}
-          className="w-9 h-9 rounded-full bg-white/10 border border-white/20 flex items-center justify-center text-xs font-mono font-medium text-white hover:border-white/40 hover:bg-white/15 transition-all cursor-pointer shadow-[0_0_15px_rgba(255,255,255,0.05)]"
-          title="Alex Morgan (Candidate Profile)"
+          className="relative w-9 h-9 rounded-full flex items-center justify-center text-neutral-400 hover:text-white hover:bg-white/5 transition-colors duration-200 cursor-pointer"
+          title="Notifications"
+          aria-label="Notifications"
         >
-          AM
+          <Icon icon="solar:bell-linear" className="text-lg" />
+          {hasUnread && (
+            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 rounded-full bg-white shadow-[0_0_8px_rgba(255,255,255,0.6)] animate-pulse" />
+          )}
         </button>
       </div>
     </nav>
