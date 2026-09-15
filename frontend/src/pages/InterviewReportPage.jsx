@@ -220,18 +220,18 @@ export default function InterviewReportPage({ interview, onBack }) {
   if (!interview) return null;
 
   /* ── Simulated timeline data ── */
-  const perfData    = [72, 78, 82, 75, 88, 91, 85, 90, interview.score - 2, interview.score];
-  const confData    = [65, 70, 60, 68, interview.score - 10, 80, 85, 88, 90, interview.score];
-  const toneData    = [80, 75, 78, 82, 85, interview.score - 5, 88, 90, 87, interview.score - 2];
+  const perfData = [72, 78, 82, 75, 88, 91, 85, 90, interview.score - 2, interview.score];
+  const confData = [65, 70, 60, 68, interview.score - 10, 80, 85, 88, 90, interview.score];
+  const toneData = [80, 75, 78, 82, 85, interview.score - 5, 88, 90, 87, interview.score - 2];
   const postureData = [70, 72, 68, 75, 78, 80, 76, 82, 85, interview.score - 3];
-  const confBars    = [68, 80, 55, 78, 88, 72, 90, 65, 85, interview.score - 4];
+  const confBars = [68, 80, 55, 78, 88, 72, 90, 65, 85, interview.score - 4];
 
   /* ── Verdict color ── */
   const verdictColor = interview.verdict.includes('Strong')
     ? 'emerald'
     : interview.verdict.includes('Hire')
-    ? 'blue'
-    : 'amber';
+      ? 'blue'
+      : 'amber';
 
   /* ── Weak questions (score < 92) ── */
   const weakQuestions = (interview.questions || []).filter((q) => q.score < 92);
@@ -350,7 +350,7 @@ export default function InterviewReportPage({ interview, onBack }) {
 
             <div className="relative z-10 border-t border-white/[0.06] pt-4 mt-4">
               <h3 className="text-base font-bold text-white tracking-tight">Performance Trend</h3>
-              <p className="text-xs text-neutral-400 font-mono mt-1">Peak: {interview.score}% · Avg: {Math.round(perfData.reduce((a,b)=>a+b)/perfData.length)}%</p>
+              <p className="text-xs text-neutral-400 font-mono mt-1">Peak: {interview.score}% · Avg: {Math.round(perfData.reduce((a, b) => a + b) / perfData.length)}%</p>
             </div>
           </div>
 
@@ -382,7 +382,7 @@ export default function InterviewReportPage({ interview, onBack }) {
 
             <div className="relative z-10 border-t border-white/[0.06] pt-4 mt-4">
               <h3 className="text-base font-bold text-white tracking-tight">Confidence Levels</h3>
-              <p className="text-xs text-neutral-400 font-mono mt-1">3 low-confidence segments · Avg: {Math.round(confBars.reduce((a,b)=>a+b)/confBars.length)}%</p>
+              <p className="text-xs text-neutral-400 font-mono mt-1">3 low-confidence segments · Avg: {Math.round(confBars.reduce((a, b) => a + b) / confBars.length)}%</p>
             </div>
           </div>
 
@@ -421,11 +421,11 @@ export default function InterviewReportPage({ interview, onBack }) {
             <div className="relative z-10 border-t border-white/[0.06] pt-4 mt-4 grid grid-cols-2 gap-4">
               <div>
                 <div className="text-[10px] text-neutral-500 font-mono uppercase tracking-widest mb-1">Tone Average</div>
-                <div className="text-lg font-mono font-bold text-white">{Math.round(toneData.reduce((a,b)=>a+b)/toneData.length)}%</div>
+                <div className="text-lg font-mono font-bold text-white">{Math.round(toneData.reduce((a, b) => a + b) / toneData.length)}%</div>
               </div>
               <div>
                 <div className="text-[10px] text-neutral-500 font-mono uppercase tracking-widest mb-1">Posture Average</div>
-                <div className="text-lg font-mono font-bold text-white">{Math.round(postureData.reduce((a,b)=>a+b)/postureData.length)}%</div>
+                <div className="text-lg font-mono font-bold text-white">{Math.round(postureData.reduce((a, b) => a + b) / postureData.length)}%</div>
               </div>
             </div>
           </div>

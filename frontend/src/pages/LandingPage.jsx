@@ -11,7 +11,7 @@ import OrbitalSection from '../components/OrbitalSection';
 import ExpansionSection from '../components/ExpansionSection';
 import Footer from '../components/Footer';
 
-export default function LandingPage({ onGoToApp, onContactSales }) {
+export default function LandingPage({ onGoToApp, onGoToPremium, onContactSales }) {
   // Global intersection observer for .fade-up and .scale-in elements
   useEffect(() => {
     const observer = new IntersectionObserver(
@@ -38,7 +38,7 @@ export default function LandingPage({ onGoToApp, onContactSales }) {
       <HeroSection onGoToApp={onGoToApp} />
       <CapabilitiesSection />
       <BentoSection />
-      <PricingSection onContactSales={onContactSales} />
+      <PricingSection onGoToApp={onGoToApp} onGoToPremium={onGoToPremium} onContactSales={onContactSales} />
       <HorizontalScrollSection />
       <MarqueeSection />
       <OrbitalSection />

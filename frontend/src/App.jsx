@@ -4,6 +4,7 @@ import HomePage from './pages/HomePage';
 import AnalysisView from './pages/AnalysisView';
 import ProfileView from './pages/ProfileView';
 import LandingPage from './pages/LandingPage';
+import PremiumPlanPage from './pages/PremiumPlanPage';
 import NewInterviewModal from './components/NewInterviewModal';
 import InterviewReportPage from './pages/InterviewReportPage';
 import ProHomeView from './pages/ProHomeView';
@@ -18,6 +19,8 @@ export default function App() {
 
   // Navigation views: 'home' | 'analysis' | 'profile' | 'landing' | 'interview-report' | 'prof-session' | 'prof-candidate'
   const [currentView, setCurrentView] = useState('home');
+  // Plan mode: 'free' | 'premium'
+  const [currentPlan, setCurrentPlan] = useState('free');
   const [isNewInterviewOpen, setIsNewInterviewOpen] = useState(false);
   const [interviewInitialData, setInterviewInitialData] = useState(null);
 
@@ -34,7 +37,10 @@ export default function App() {
     setIsNewInterviewOpen(true);
   };
 
-  const handleStartSession = () => { setCurrentView('home'); };
+  const handleStartSession = (_config) => {
+    // Switch to home and notify
+    setCurrentView('home');
+  };
 
   // Personal plan
   const handleViewReport = (interview) => {
@@ -85,7 +91,16 @@ export default function App() {
           </button>
         </div>
         <LandingPage
-          onGoToApp={() => setCurrentView('home')}
+          onGoToApp={() => {
+            setPlan('personal');
+            setCurrentPlan('free');
+            setCurrentView('home');
+          }}
+          onGoToPremium={() => {
+            setPlan('personal');
+            setCurrentPlan('premium');
+            setCurrentView('home');
+          }}
           onContactSales={handleContactSales}
         />
       </div>
@@ -151,6 +166,7 @@ export default function App() {
   // ── Main App Shell ───────────────────────────────────────────────────────────
   return (
     <div className="min-h-screen bg-black text-neutral-200 selection:bg-white/20 selection:text-white relative">
+      {/* Praxis App Navigation with 3 tabs (Home, Analysis, Profile) */}
       <AppNavbar
         activeTab={currentView}
         plan={plan}
@@ -160,20 +176,38 @@ export default function App() {
         onPlanChange={setPlan}
       />
 
+      {/* Main Views: Home, Analysis, Profile for both Free & Premium & Professional */}
       <main>
         {/* ── Personal Plan Views ── */}
         {plan === 'personal' && currentView === 'home' && (
-          <HomePage
-            userName="Alex"
-            onOpenNewInterview={(item) => handleOpenNewInterview(item)}
-            onViewReport={handleViewReport}
-          />
+          currentPlan === 'premium' ? (
+            <PremiumPlanPage
+              userName="Alex"
+              onOpenNewInterview={(item) => handleOpenNewInterview(item)}
+              onViewReport={handleViewReport}
+              onSwitchToFree={() => setCurrentPlan('free')}
+            />
+          ) : (
+            <HomePage
+              userName="Alex"
+              onOpenNewInterview={(item) => handleOpenNewInterview(item)}
+              onViewReport={handleViewReport}
+            />
+          )
         )}
         {plan === 'personal' && currentView === 'analysis' && (
           <AnalysisView onStartPractice={() => handleOpenNewInterview()} />
         )}
         {plan === 'personal' && currentView === 'profile' && (
-          <ProfileView onOpenNewInterview={() => handleOpenNewInterview()} />
+          <ProfileView
+            currentPlan={currentPlan}
+            onOpenNewInterview={() => handleOpenNewInterview()}
+            onViewReport={handleViewReport}
+            onGoToPremium={() => {
+              setCurrentPlan('premium');
+              setCurrentView('home');
+            }}
+          />
         )}
 
         {/* ── Professional Plan Views ── */}

@@ -25,7 +25,7 @@ const plans = [
     billing: '/ month',
     tagline: 'For candidates who want a deeper edge.',
     highlighted: true,
-    ctaText: 'Upgrade to Premium',
+    ctaText: 'Get Premium',
     ctaVariant: 'primary',
     features: [
       { text: 'Everything in Personal', bold: true },
@@ -53,7 +53,7 @@ const plans = [
   },
 ];
 
-export default function PricingSection({ onContactSales }) {
+export default function PricingSection({ onGoToPremium, onGoToApp, onContactSales }) {
   return (
     <section className="z-10 py-32 relative bg-[#000] border-t border-white/10" id="plans">
       <div className="max-w-7xl mx-auto px-6">
@@ -156,20 +156,38 @@ export default function PricingSection({ onContactSales }) {
               {/* Pinned CTA Button */}
               <div className="mt-auto pt-4">
                 {plan.ctaVariant === 'primary' ? (
-                  <button className="w-full py-4 rounded-xl bg-white text-black font-semibold text-sm hover:bg-neutral-200 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.2)] active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
+                  <button
+                    onClick={() => {
+                      if (plan.name === 'Premium' && onGoToPremium) {
+                        onGoToPremium();
+                      } else if (onGoToApp) {
+                        onGoToApp();
+                      }
+                    }}
+                    className="w-full py-4 rounded-xl bg-white text-black font-semibold text-sm hover:bg-neutral-200 transition-all duration-300 shadow-[0_0_30px_rgba(255,255,255,0.2)] active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+                  >
                     <span>{plan.ctaText}</span>
                     <Icon icon="solar:arrow-right-linear" className="text-base" />
                   </button>
                 ) : plan.name === 'Professional' ? (
                   <button
-                    onClick={onContactSales}
+                    onClick={() => {
+                      if (onContactSales) {
+                        onContactSales();
+                      } else if (onGoToApp) {
+                        onGoToApp();
+                      }
+                    }}
                     className="w-full py-4 rounded-xl border border-white/15 bg-white/[0.04] hover:bg-white/10 text-white font-medium text-sm transition-all duration-300 active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
                   >
                     <span>{plan.ctaText}</span>
                     <Icon icon="solar:arrow-right-linear" className="text-base" />
                   </button>
                 ) : (
-                  <button className="w-full py-4 rounded-xl border border-white/15 bg-white/[0.04] hover:bg-white/10 text-white font-medium text-sm transition-all duration-300 active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
+                  <button
+                    onClick={() => onGoToApp && onGoToApp()}
+                    className="w-full py-4 rounded-xl border border-white/15 bg-white/[0.04] hover:bg-white/10 text-white font-medium text-sm transition-all duration-300 active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+                  >
                     <span>{plan.ctaText}</span>
                     <Icon icon="solar:arrow-right-linear" className="text-base" />
                   </button>

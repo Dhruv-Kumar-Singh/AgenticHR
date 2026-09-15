@@ -28,7 +28,7 @@ export default function AppNavbar({ activeTab, onTabChange, onViewLanding, hasUn
         </span>
       </a>
 
-      {/* Center nav links: Home, Analysis, Profile with route-based active state */}
+      {/* Center nav links: Home, Analysis, Profile */}
       <div className="flex items-center gap-6 sm:gap-8 text-xs font-mono">
         {navItems.map(({ label, id }) => {
           const isActive = activeTab === id;
@@ -36,16 +36,14 @@ export default function AppNavbar({ activeTab, onTabChange, onViewLanding, hasUn
             <button
               key={id}
               onClick={() => onTabChange(id)}
-              className={`flex items-center gap-2 transition-colors duration-300 group cursor-pointer ${
-                isActive ? 'text-white font-medium' : 'text-neutral-400 hover:text-white'
-              }`}
+              className={`flex items-center gap-2 transition-colors duration-300 group cursor-pointer ${isActive ? 'text-white font-medium' : 'text-neutral-400 hover:text-white'
+                }`}
             >
               <span
-                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                  isActive
+                className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${isActive
                     ? 'bg-white shadow-[0_0_8px_rgba(255,255,255,0.6)] scale-110'
                     : 'bg-neutral-600 group-hover:bg-neutral-300'
-                }`}
+                  }`}
               />
               <span className="tracking-wider uppercase">{label}</span>
             </button>
@@ -61,11 +59,10 @@ export default function AppNavbar({ activeTab, onTabChange, onViewLanding, hasUn
             <button
               key={p}
               onClick={() => onPlanChange && onPlanChange(p)}
-              className={`px-3 py-1 rounded-full text-[10px] font-mono uppercase tracking-widest transition-all duration-200 cursor-pointer ${
-                plan === p
+              className={`px-3 py-1 rounded-full text-[10px] font-mono uppercase tracking-widest transition-all duration-200 cursor-pointer ${plan === p
                   ? 'bg-white text-black font-semibold'
                   : 'text-neutral-400 hover:text-white'
-              }`}
+                }`}
             >
               {p === 'personal' ? 'Personal' : 'Pro'}
             </button>
