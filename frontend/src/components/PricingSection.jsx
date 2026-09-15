@@ -53,7 +53,7 @@ const plans = [
   },
 ];
 
-export default function PricingSection() {
+export default function PricingSection({ onContactSales }) {
   return (
     <section className="z-10 py-32 relative bg-[#000] border-t border-white/10" id="plans">
       <div className="max-w-7xl mx-auto px-6">
@@ -160,6 +160,14 @@ export default function PricingSection() {
                     <span>{plan.ctaText}</span>
                     <Icon icon="solar:arrow-right-linear" className="text-base" />
                   </button>
+                ) : plan.name === 'Professional' ? (
+                  <button
+                    onClick={onContactSales}
+                    className="w-full py-4 rounded-xl border border-white/15 bg-white/[0.04] hover:bg-white/10 text-white font-medium text-sm transition-all duration-300 active:scale-95 flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <span>{plan.ctaText}</span>
+                    <Icon icon="solar:arrow-right-linear" className="text-base" />
+                  </button>
                 ) : (
                   <button className="w-full py-4 rounded-xl border border-white/15 bg-white/[0.04] hover:bg-white/10 text-white font-medium text-sm transition-all duration-300 active:scale-95 flex items-center justify-center gap-2 cursor-pointer">
                     <span>{plan.ctaText}</span>
@@ -167,6 +175,7 @@ export default function PricingSection() {
                   </button>
                 )}
               </div>
+
             </div>
           ))}
         </div>

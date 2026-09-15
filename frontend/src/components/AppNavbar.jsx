@@ -1,6 +1,6 @@
 import { Icon } from '@iconify/react';
 
-export default function AppNavbar({ activeTab, onTabChange, onViewLanding, hasUnread = true }) {
+export default function AppNavbar({ activeTab, onTabChange, onViewLanding, hasUnread = true, plan = 'personal', onPlanChange }) {
   const navItems = [
     { label: 'Home', id: 'home' },
     { label: 'Analysis', id: 'analysis' },
@@ -55,6 +55,23 @@ export default function AppNavbar({ activeTab, onTabChange, onViewLanding, hasUn
 
       {/* Right-aligned: system status + notification bell + optional landing toggle */}
       <div className="flex items-center gap-3">
+        {/* Plan toggle pill */}
+        <div className="hidden md:flex items-center gap-0.5 p-0.5 rounded-full bg-white/[0.04] border border-white/10">
+          {['personal', 'professional'].map((p) => (
+            <button
+              key={p}
+              onClick={() => onPlanChange && onPlanChange(p)}
+              className={`px-3 py-1 rounded-full text-[10px] font-mono uppercase tracking-widest transition-all duration-200 cursor-pointer ${
+                plan === p
+                  ? 'bg-white text-black font-semibold'
+                  : 'text-neutral-400 hover:text-white'
+              }`}
+            >
+              {p === 'personal' ? 'Personal' : 'Pro'}
+            </button>
+          ))}
+        </div>
+
         {/* Landing Page Preview toggle */}
         {onViewLanding && (
           <button

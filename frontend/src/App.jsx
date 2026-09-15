@@ -6,39 +6,75 @@ import ProfileView from './pages/ProfileView';
 import LandingPage from './pages/LandingPage';
 import NewInterviewModal from './components/NewInterviewModal';
 import InterviewReportPage from './pages/InterviewReportPage';
+import ProHomeView from './pages/ProHomeView';
+import ProfInterviewSessionPage from './pages/ProfInterviewSessionPage';
+import ProfCandidateDetailPage from './pages/ProfCandidateDetailPage';
+import ProfAnalysisView from './pages/ProfAnalysisView';
+import ProfProfileView from './pages/ProfProfileView';
 
 export default function App() {
-  // Navigation tabs: 'home' | 'analysis' | 'profile' | 'landing' | 'interview-report'
+  // plan: 'personal' | 'professional'
+  const [plan, setPlan] = useState('personal');
+
+  // Navigation views: 'home' | 'analysis' | 'profile' | 'landing' | 'interview-report' | 'prof-session' | 'prof-candidate'
   const [currentView, setCurrentView] = useState('home');
   const [isNewInterviewOpen, setIsNewInterviewOpen] = useState(false);
   const [interviewInitialData, setInterviewInitialData] = useState(null);
+
+  // Personal plan state
   const [selectedReport, setSelectedReport] = useState(null);
+
+  // Professional plan state
+  const [selectedSession, setSelectedSession] = useState(null);
+  const [selectedCandidate, setSelectedCandidate] = useState(null);
+  const [selectedCandidateSession, setSelectedCandidateSession] = useState(null);
 
   const handleOpenNewInterview = (data = null) => {
     setInterviewInitialData(data);
     setIsNewInterviewOpen(true);
   };
 
-  const handleStartSession = (config) => {
-    // Switch to home and notify
-    setCurrentView('home');
-  };
+  const handleStartSession = () => { setCurrentView('home'); };
 
+  // Personal plan
   const handleViewReport = (interview) => {
     setSelectedReport(interview);
     setCurrentView('interview-report');
   };
-
   const handleBackFromReport = () => {
     setCurrentView('home');
     setSelectedReport(null);
   };
 
-  // If viewing the Landing Page
+  // Professional plan
+  const handleViewSession = (session) => {
+    setSelectedSession(session);
+    setCurrentView('prof-session');
+  };
+  const handleBackFromSession = () => {
+    setCurrentView('home');
+    setSelectedSession(null);
+  };
+  const handleViewCandidate = (candidate, session) => {
+    setSelectedCandidate(candidate);
+    setSelectedCandidateSession(session);
+    setCurrentView('prof-candidate');
+  };
+  const handleBackFromCandidate = () => {
+    setCurrentView('prof-session');
+    setSelectedCandidate(null);
+  };
+
+  // Switch to professional plan
+  const handleContactSales = () => {
+    setPlan('professional');
+    setCurrentView('home');
+  };
+
+  // ── Landing Page ─────────────────────────────────────────────────────────────
   if (currentView === 'landing') {
     return (
       <div className="relative">
-        {/* Quick floating button to return to app homepage */}
         <div className="fixed bottom-6 right-6 z-50">
           <button
             onClick={() => setCurrentView('home')}
@@ -48,61 +84,110 @@ export default function App() {
             <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
           </button>
         </div>
-        <LandingPage onGoToApp={() => setCurrentView('home')} />
+        <LandingPage
+          onGoToApp={() => setCurrentView('home')}
+          onContactSales={handleContactSales}
+        />
       </div>
     );
   }
 
-  // If viewing a full interview report
-  if (currentView === 'interview-report' && selectedReport) {
+  // ── Personal: Full Interview Report ──────────────────────────────────────────
+  if (plan === 'personal' && currentView === 'interview-report' && selectedReport) {
     return (
       <>
         <AppNavbar
           activeTab="home"
+          plan={plan}
           onTabChange={(tab) => { setCurrentView(tab); setSelectedReport(null); }}
-          onOpenNewInterview={() => handleOpenNewInterview()}
           onViewLanding={() => setCurrentView('landing')}
+          onPlanChange={setPlan}
         />
-        <InterviewReportPage
-          interview={selectedReport}
-          onBack={handleBackFromReport}
+        <InterviewReportPage interview={selectedReport} onBack={handleBackFromReport} />
+      </>
+    );
+  }
+
+  // ── Professional: Session Detail ─────────────────────────────────────────────
+  if (plan === 'professional' && currentView === 'prof-session' && selectedSession) {
+    return (
+      <>
+        <AppNavbar
+          activeTab="home"
+          plan={plan}
+          onTabChange={(tab) => { setCurrentView(tab); setSelectedSession(null); }}
+          onViewLanding={() => setCurrentView('landing')}
+          onPlanChange={setPlan}
+        />
+        <ProfInterviewSessionPage
+          session={selectedSession}
+          onBack={handleBackFromSession}
+          onViewCandidate={handleViewCandidate}
         />
       </>
     );
   }
 
+  // ── Professional: Candidate Detail ───────────────────────────────────────────
+  if (plan === 'professional' && currentView === 'prof-candidate' && selectedCandidate) {
+    return (
+      <>
+        <AppNavbar
+          activeTab="home"
+          plan={plan}
+          onTabChange={(tab) => { setCurrentView(tab); setSelectedCandidate(null); }}
+          onViewLanding={() => setCurrentView('landing')}
+          onPlanChange={setPlan}
+        />
+        <ProfCandidateDetailPage
+          candidate={selectedCandidate}
+          session={selectedCandidateSession}
+          onBack={handleBackFromCandidate}
+        />
+      </>
+    );
+  }
+
+  // ── Main App Shell ───────────────────────────────────────────────────────────
   return (
     <div className="min-h-screen bg-black text-neutral-200 selection:bg-white/20 selection:text-white relative">
-      {/* Praxis App Navigation with Logo, Symbol, 3 tabs (Home, Analysis, Profile) */}
       <AppNavbar
         activeTab={currentView}
+        plan={plan}
         onTabChange={(tab) => setCurrentView(tab)}
         onOpenNewInterview={() => handleOpenNewInterview()}
         onViewLanding={() => setCurrentView('landing')}
+        onPlanChange={setPlan}
       />
 
-      {/* Main Views */}
       <main>
-        {currentView === 'home' && (
+        {/* ── Personal Plan Views ── */}
+        {plan === 'personal' && currentView === 'home' && (
           <HomePage
             userName="Alex"
             onOpenNewInterview={(item) => handleOpenNewInterview(item)}
             onViewReport={handleViewReport}
           />
         )}
-        {currentView === 'analysis' && (
-          <AnalysisView
-            onStartPractice={() => handleOpenNewInterview()}
-          />
+        {plan === 'personal' && currentView === 'analysis' && (
+          <AnalysisView onStartPractice={() => handleOpenNewInterview()} />
         )}
-        {currentView === 'profile' && (
-          <ProfileView
-            onOpenNewInterview={() => handleOpenNewInterview()}
-          />
+        {plan === 'personal' && currentView === 'profile' && (
+          <ProfileView onOpenNewInterview={() => handleOpenNewInterview()} />
+        )}
+
+        {/* ── Professional Plan Views ── */}
+        {plan === 'professional' && currentView === 'home' && (
+          <ProHomeView companyName="TechCorp" onViewSession={handleViewSession} />
+        )}
+        {plan === 'professional' && currentView === 'analysis' && (
+          <ProfAnalysisView />
+        )}
+        {plan === 'professional' && currentView === 'profile' && (
+          <ProfProfileView />
         )}
       </main>
 
-      {/* New Interview Configuration Modal */}
       <NewInterviewModal
         isOpen={isNewInterviewOpen}
         onClose={() => setIsNewInterviewOpen(false)}
@@ -112,3 +197,4 @@ export default function App() {
     </div>
   );
 }
+
